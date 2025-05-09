@@ -1,5 +1,11 @@
 import server from "./server";
+import colors from "colors";
+import { PORT } from "./constants/env";
 
-server.listen(4000, () => {
-  console.log("Server is running on port 4000 in development enviroment");
+server.listen(PORT, () => {
+  console.log(
+    colors.magenta.bold(
+      `Server is running on port ${PORT} in development enviroment`
+    )
+  );
 });
