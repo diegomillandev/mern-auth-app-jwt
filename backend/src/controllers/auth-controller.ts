@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
+import { catchErrors } from "../utils/catch-errors";
 
 export class AuthController {
-  static register = async (req: Request, res: Response) => {
-    console.log("Register endpoint hit");
-  };
+  static register = catchErrors(async (req, res) => {
+    const { email, password } = req.body;
+  });
 }
