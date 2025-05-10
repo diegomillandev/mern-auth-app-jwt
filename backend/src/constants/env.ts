@@ -11,3 +11,7 @@ const getEnv = (key: string, defaultValue?: string) => {
 
 export const PORT = getEnv("PORT", "5000");
 export const MONGO_URI = getEnv("MONGO_URI");
+export const SMTP_HOST = getEnv("SMTP_HOST");
+export const SMTP_PORT = getEnv("SMTP_PORT");
+export const SMTP_USER = getEnv("SMTP_USER");
+export const SMTP_PASS = getEnv("SMTP_PASS");

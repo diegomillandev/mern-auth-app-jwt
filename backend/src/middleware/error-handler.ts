@@ -1,4 +1,4 @@
-import { ErrorRequestHandler } from "express";
+import { ErrorRequestHandler, Response } from "express";
 import { INTERNAL_SERVER_ERROR } from "../constants/http";
 
 export const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
