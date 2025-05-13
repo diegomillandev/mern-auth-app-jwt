@@ -8,4 +8,6 @@ export const messages = {
   INVALID_TOKEN: "Invalid token",
   ACCOUNT_CONFIRMED: "Account confirmed successfully",
   ACCOUNT_NOT_CONFIRMED: "Account not confirmed, please check your email",
+  EMAIL_SENT: "Email sent successfully",
+  PASSWORD_RESET: "Password reset successfully",
 };

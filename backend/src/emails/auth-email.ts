@@ -35,4 +35,30 @@ export class AuthEmail {
       `,
     });
   };
+
+  static sendForgotPasswordEmail = async ({
+    user,
+  }: sendVerificationTokenProps) => {
+    await transporter.sendMail({
+      from: `Support <${EMAIL_SUPPORT_ACCOUNT}>`,
+      to: user.email,
+      subject: "MERN - Reset your password",
+      text: `
+        Hello,
+        We received a request to reset your password. Please click the link below to reset it:
+        http://localhost:5000/api/auth/reset-password/${user.token}
+        If you did not request this, please ignore this email.
+        Best regards,
+      `,
+      html: `
+        <div style="font-family: Arial, sans-serif; line-height: 1.5;">
+          <h2>Hello,</h2>
+          <p>We received a request to reset your password. Please click the link below to reset it:</p>
+          <a href="http://localhost:5000/api/auth/reset-password/${user.token}" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Reset Password</a>
+          <p>If you did not request this, please ignore this email.</p>
+          <p>Best regards,</p>
+        </div>
+      `,
+    });
+  };
 }

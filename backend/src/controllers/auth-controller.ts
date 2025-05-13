@@ -139,4 +139,114 @@ export class AuthController {
 
     res.json(token);
   });
+
+  static forgotPassword = catchErrors(async (req, res) => {
+    const { email } = req.body;
+
+    // Check if the user exists
+    const userExists = await User.findOne({ email });
+
+    if (!userExists) {
+      return res.status(BAD_REQUEST).json({ message: messages.USER_NOT_FOUND });
+    }
+
+    // Check if the user is verified
+    if (!userExists.verified) {
+      const tokenExists = await Token.findOne({ userId: userExists._id });
+
+      if (tokenExists) {
+        await Token.deleteOne({ _id: tokenExists._id });
+      }
+
+      const token = generateToken();
+      const encryptToken = await encryptWithAES(token);
+
+      const newToken = new Token({
+        userId: userExists._id,
+        token,
+      });
+
+      AuthEmail.sendConfirmationEmail({
+        user: {
+          email: userExists.email,
+          name: userExists.email,
+          token: encryptToken,
+        },
+      });
+
+      await newToken.save();
+      return res
+        .status(BAD_REQUEST)
+        .json({ message: messages.ACCOUNT_NOT_CONFIRMED });
+    }
+
+    const token = generateToken();
+    const encryptToken = await encryptWithAES(token);
+
+    const newToken = new Token({
+      userId: userExists._id,
+      token,
+    });
+    AuthEmail.sendForgotPasswordEmail({
+      user: {
+        email: userExists.email,
+        name: userExists.email,
+        token: encryptToken,
+      },
+    });
+    await newToken.save();
+
+    return res.status(CREATED).json({ message: messages.EMAIL_SENT });
+  });
+
+  static validateToken = catchErrors(async (req, res) => {
+    const { token: ciphertext } = req.body;
+
+    const token = await decryptWithAES(ciphertext);
+
+    const validateToken = await Token.findOne({
+      token,
+    });
+
+    if (!validateToken) {
+      return res.status(BAD_REQUEST).json({ message: messages.INVALID_TOKEN });
+    }
+
+    res.send("Token is valid");
+  });
+
+  static resetPasswordWithToken = catchErrors(async (req, res) => {
+    const { token: ciphertext } = req.params;
+    const { password } = req.body;
+
+    const token = await decryptWithAES(ciphertext);
+
+    const validateToken = await Token.findOne({
+      token,
+    });
+
+    if (!validateToken) {
+      return res.status(BAD_REQUEST).json({ message: messages.INVALID_TOKEN });
+    }
+
+    const user = await User.findById(validateToken.userId);
+
+    if (!user) {
+      return res.status(BAD_REQUEST).json({ message: messages.USER_NOT_FOUND });
+    }
+
+    // hashValue
+    const hashPassword = await hashValue(password);
+
+    // Update the user's password
+    user.password = hashPassword;
+
+    // Save the updated user
+    await user.save();
+
+    // Delete the token from the database
+    await Token.deleteOne({ _id: validateToken._id });
+
+    return res.status(CREATED).json({ message: messages.PASSWORD_RESET });
+  });
 }
