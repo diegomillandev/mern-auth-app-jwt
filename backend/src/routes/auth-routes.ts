@@ -35,4 +35,12 @@ router.post(
   handleInputErrors,
   AuthController.confirmAccount
 );
+
+router.post(
+  "/login",
+  body("email").notEmpty().isEmail().withMessage("Invalid email"),
+  body("password").notEmpty().withMessage("password is required"),
+  handleInputErrors,
+  AuthController.loginAccount
+);
 export default router;

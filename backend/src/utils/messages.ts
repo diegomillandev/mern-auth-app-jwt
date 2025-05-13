@@ -7,4 +7,5 @@ export const messages = {
   ACCOUNT_UPDATED: "Account updated successfully",
   INVALID_TOKEN: "Invalid token",
   ACCOUNT_CONFIRMED: "Account confirmed successfully",
+  ACCOUNT_NOT_CONFIRMED: "Account not confirmed, please check your email",
 };
