@@ -1,4 +1,5 @@
 import { transporter } from "../config/nodemailer";
+import { EMAIL_SUPPORT_ACCOUNT } from "../constants/env";
 
 interface sendVerificationTokenProps {
   user: {
@@ -9,24 +10,29 @@ interface sendVerificationTokenProps {
 }
 
 export class AuthEmail {
-  static sendVerificationToken = async ({
+  static sendConfirmationEmail = async ({
     user,
   }: sendVerificationTokenProps) => {
     await transporter.sendMail({
-      from: `Overtime Support <${process.env.EMAIL_USER}>`,
+      from: `Support <${EMAIL_SUPPORT_ACCOUNT}>`,
       to: user.email,
-      subject: "Código de Verificación - OTP",
-      text: `Tu código OTP para acceder a la aplicación`,
+      subject: "MERN - Verify your account",
+      text: `
+        Hello,
+        Thank you for registering with us. Please click the link below to verify your account:
+        http://localhost:5000/api/auth/verify/${user.token}
+        If you did not register, please ignore this email.
+        Best regards,
+      `,
       html: `
-                <p>Hola <strong>${user.name}</strong>,</p>
-                <p>Hemos recibido una solicitud para acceder a tu cuenta. Aquí está tu código OTP para completar el inicio de sesión:</p>
-                <h3 style="color: #2e86de;">${user.token}</h3>
-                <p>Este código es válido por <strong>2 minutos</strong>. Si no realizaste esta solicitud, por favor ignora este correo.</p>
-                <p><em>Recuerda que este código es personal y no debes compartirlo con nadie.</em></p>
-                <p>Si necesitas asistencia, contacta a nuestro equipo de soporte.</p>
-                <br/>
-                <p>Saludos,</p>
-            `,
+        <div style="font-family: Arial, sans-serif; line-height: 1.5;">
+          <h2>Hello ${user.name},</h2>
+          <p>Thank you for registering with us. Please click the link below to verify your account:</p>
+          <a href="http://localhost:5000/api/auth/verify/${user.token}" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Verify Account</a>
+          <p>If you did not register, please ignore this email.</p>
+          <p>Best regards,</p>
+        </div>
+      `,
     });
   };
 }

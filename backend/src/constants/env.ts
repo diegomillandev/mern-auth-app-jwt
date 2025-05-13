@@ -15,3 +15,5 @@ export const SMTP_HOST = getEnv("SMTP_HOST");
 export const SMTP_PORT = getEnv("SMTP_PORT");
 export const SMTP_USER = getEnv("SMTP_USER");
 export const SMTP_PASS = getEnv("SMTP_PASS");
+export const EMAIL_SUPPORT_ACCOUNT = getEnv("EMAIL_SUPPORT_ACCOUNT");
+export const SECRET_KEY = getEnv("SECRET_KEY");
