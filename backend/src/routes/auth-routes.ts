@@ -26,7 +26,7 @@ router.post(
 );
 
 router.post(
-  "/confirm-email",
+  "/confirm-account",
   body("token")
     .notEmpty()
     .withMessage("token is required")

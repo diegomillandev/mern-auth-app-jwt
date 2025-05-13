@@ -100,25 +100,26 @@ export class AuthController {
 
       if (tokenExists) {
         await Token.deleteOne({ _id: tokenExists._id });
-
-        const token = generateToken();
-        const encryptToken = await encryptWithAES(token);
-
-        const newToken = new Token({
-          userId: userExists._id,
-          token,
-        });
-
-        AuthEmail.sendConfirmationEmail({
-          user: {
-            email: userExists.email,
-            name: userExists.email,
-            token: encryptToken,
-          },
-        });
-
-        await newToken.save();
       }
+
+      const token = generateToken();
+      const encryptToken = await encryptWithAES(token);
+
+      const newToken = new Token({
+        userId: userExists._id,
+        token,
+      });
+
+      AuthEmail.sendConfirmationEmail({
+        user: {
+          email: userExists.email,
+          name: userExists.email,
+          token: encryptToken,
+        },
+      });
+
+      await newToken.save();
+
       return res
         .status(BAD_REQUEST)
         .json({ message: messages.ACCOUNT_NOT_CONFIRMED });

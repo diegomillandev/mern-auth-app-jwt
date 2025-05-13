@@ -26,7 +26,7 @@ export class AuthEmail {
       `,
       html: `
         <div style="font-family: Arial, sans-serif; line-height: 1.5;">
-          <h2>Hello ${user.name},</h2>
+          <h2>Hello,</h2>
           <p>Thank you for registering with us. Please click the link below to verify your account:</p>
           <a href="http://localhost:5000/api/auth/verify/${user.token}" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Verify Account</a>
           <p>If you did not register, please ignore this email.</p>
