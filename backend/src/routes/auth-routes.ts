@@ -25,4 +25,14 @@ router.post(
   AuthController.createAccount
 );
 
+router.post(
+  "/confirm-email",
+  body("token")
+    .notEmpty()
+    .withMessage("token is required")
+    .isString()
+    .withMessage("token must be a string"),
+  handleInputErrors,
+  AuthController.confirmAccount
+);
 export default router;
